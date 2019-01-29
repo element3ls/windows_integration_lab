@@ -1,0 +1,7 @@
+---
+# Setup playbook
+
+- hosts: windows
+  roles: 
+    - win_ad_install
+

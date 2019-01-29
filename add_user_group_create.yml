@@ -1,0 +1,9 @@
+---
+
+# Create users in Windows AD
+- name: add all AD users
+  hosts: windows
+  vars_files:
+    - ./add_user_var.yml
+  roles: 
+    - win_ad_user 

@@ -1,0 +1,27 @@
+---
+# tasks file for roles/win_Service_config
+
+- name: Install Windows package
+  win_chocolatey:
+    name: "{{ package_name }}"
+    params: "{{ parameters }}"
+    state: latest
+  when: ansible_distribution == "Windows Server 2012 R2 Standard"
+
+- name: Accepts service name and enables it 
+  win_service: 
+    name: "{{ service_name }}"
+    state: started
+    start_mode: auto
+  when: ansible_distribution == "Windows Server 2012 R2 Standard"
+
+- name: Creates a firewall rule based on the name
+  win_firewall_rule:
+    name: "{{ service_name }}"
+    localport: "{{ local_port }}"
+    action: allow
+    direction: in
+    protocol: "{{ protocol_name }}"
+    state: present
+    enabled: yes
+    

@@ -1,0 +1,26 @@
+
+---
+# tasks file for roles/win_ad_install
+
+- name: Installing Windows AD Services
+  win_feature:
+    name: AD-Domain-Services
+    state: present
+
+- name: Creates a named domain
+  win_domain:
+    dns_domain_name: "{{ ad_domain_name }}"
+    safe_mode_password: "{{ ad_admin_password }}" 
+  register: win_domain_output
+
+- name: Reboot if required
+  win_reboot:
+  when: win_domain_output.reboot_required
+
+
+- name: Print domain list after reboot
+  win_shell: nltest /dclist:"{{ ad_domain_name }}"
+  register: win_domain_list
+
+- name: List Domains 
+  debug: var=win_domain_list
